@@ -11,5 +11,5 @@ app.get('/', (request, response) => {
 app.listen(port, host, () => {
     console.log('Сервер начал прослушивание запросов на порту 3000')
   })
-console.log(myTextModule.fileContent());
+
 console.log(`hello ${name.name}!`);
