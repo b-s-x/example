@@ -7,18 +7,20 @@ const port = 3000;
 const host = '127.0.0.1'
 
 app.get(`/${name.name}`, (request, response) => {
-    if(request.url === '/bsx') {
-      response.write(`hello ${name.name}!`)
-    }
-    response.end()
+  response.send(`hello ${name.name}!`)
   })
 
-app.get('/', (request, response) => {
-    response.end(`hello!`)
+app.get('/', function(request, response) {
+  response.send('<h1>Home</h1>')
   })
+
+app.get('/about', function(request, response) {
+  response.send('<h1>About</h1>')
+  })
+
 
 app.listen(port, host, () => {
-    console.log('Сервер начал прослушивание запросов на порту 3000')
+    console.log('Server is listening on 3000 port')
   })
 
 
