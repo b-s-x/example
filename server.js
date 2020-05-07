@@ -6,6 +6,18 @@ const Emitter = require('events')
 const port = 3000;
 const host = '127.0.0.1'
 
+app.use((request, response, next) => {
+  const now = new Date();
+  const hour = now.getHours();
+  const minutes = now.getMinutes();
+  const seconds = now.getSeconds();
+  const data = `${hour}:${minutes}:${seconds} ${request.method} ${request.url}`
+  fs.appendFile('server.log', data + '\n', (err) => {
+    if (err) throw err
+  })
+  next()
+});
+
 app.get(`/${name.name}`, (request, response) => {
   response.send(`hello ${name.name}!`)
   })
