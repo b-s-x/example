@@ -1,14 +1,9 @@
 const fs = require('fs');
 
-exports.fileContent = fs.readFile('text.txt', 'utf8', (err, data) => {
-  if(err) {
-    throw err
-  }
-  console.log(data);
-})
+module.exports.fileContent = function(cb) {
+  fs.readFile('text.txt', 'utf8', cb)
+}
 
 exports.fileWrite = fs.appendFile('text.txt', "I was here\n", 'utf8', err => {
   if(err) throw err
-})   
-
-console.log();
+})
