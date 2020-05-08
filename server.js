@@ -8,10 +8,18 @@ const port = 3000;
 const host = '127.0.0.1'
 
 app.use((request, response, next) => {
+
+  const addZero = (i) => {
+    if( i < 10) {
+      i = "0" + i
+    }
+  return i
+  }
+
   const now = new Date();
-  const hour = now.getHours();
-  const minutes = now.getMinutes();
-  const seconds = now.getSeconds();
+  const hour = addZero(now.getHours());
+  const minutes = addZero(now.getMinutes());
+  const seconds = addZero(now.getSeconds());
   const data = `${hour}:${minutes}:${seconds} ${request.method} ${request.url}`
   fs.appendFile('server.log', data + '\n', (err) => {
     if (err) throw err
