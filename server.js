@@ -35,7 +35,6 @@ app.listen(port, host, () => {
     console.log('Server is listening on 3000 port')
   })
 
-
 fsOps.fileContent((data, err) => {
   if(err) {
     let emitter = new Emitter();
@@ -44,7 +43,6 @@ fsOps.fileContent((data, err) => {
     });
 
     emitter.emit('err', new Error('Very sad!:('))
-
 
   }
   console.log(data);
