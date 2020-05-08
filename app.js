@@ -1,7 +1,8 @@
 const fs = require('fs');
 const zlib = require('zlib');
+const Emitter = require('events')
 
-module.exports.fileContent = function(cb) {
+const fileContent = function(cb) {
   fs.readFile('text.txt', 'utf8', cb)
 }
 
@@ -15,3 +16,16 @@ const writeStream = fs.createWriteStream('text.txt.gz');
 const gzip  = zlib.createGzip();
 
 readStream.pipe(gzip).pipe(writeStream);
+
+fileContent((data, err) => {
+  if(err) {
+    let emitter = new Emitter();
+    emitter.on('err', (err) => {
+      console.error("Something broken");
+    });
+
+    emitter.emit('err', new Error('Very sad!:('))
+
+  }
+  console.log(data);
+})

@@ -34,16 +34,3 @@ app.get('/about', function(request, response) {
 app.listen(port, host, () => {
     console.log('Server is listening on 3000 port')
   })
-
-fsOps.fileContent((data, err) => {
-  if(err) {
-    let emitter = new Emitter();
-    emitter.on('err', (err) => {
-      console.error("Something broken");
-    });
-
-    emitter.emit('err', new Error('Very sad!:('))
-
-  }
-  console.log(data);
-})
