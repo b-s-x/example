@@ -2,7 +2,8 @@ const name = require('./user/person')
 const app = require('express')();
 const Emitter = require('events');
 const fs = require('fs')
-const ops = require('./app')
+const ops = require('./app');
+const pug = require('pug')
 
 const port = 3000;
 const host = '127.0.0.1'
@@ -27,17 +28,24 @@ app.use((request, response, next) => {
   next()
 });
 
-app.set('view engine', 'pug');
-
-app.use('/home', (request, response) => {
-  response.render('home', {
-    title: "You're welcome",
-    main: 'Are u alive?'
+const template = (path) => {
+  const read = fs.readFile(path, 'utf8', (err, data) => {
+    if(err) {
+      return console.error(`Error: ${err}`);
+    }
+    return data
   })
-});
+
+  const fnPugCompile = pug.compile(path);
+  const renderPugData = fnPugCompile(fnPugCompile)
+
+  return renderPugData;
+};
+
+const x = template("views/home.pug")
 
 app.use('/home', (request, response) => {
-  response.send('Main page');
+  response.end(x);
 });
 
 app.get(`/${name.name}`, (request, response) => {
@@ -58,5 +66,5 @@ app.listen(port, host, () => {
 
 let timerLog = setTimeout(function tick() {
   console.log(`Waiting...`);
-  timer = setTimeout(tick, 10000);
+  timer = setTimeout(tick, 20000);
 }, 2000);
