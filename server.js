@@ -55,3 +55,8 @@ app.get('/about', function(request, response) {
 app.listen(port, host, () => {
     console.log('Server is listening on 3000 port')
 });
+
+let timerLog = setTimeout(function tick() {
+  console.log(`Waiting...`);
+  timer = setTimeout(tick, 10000);
+}, 2000);
