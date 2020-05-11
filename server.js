@@ -28,7 +28,7 @@ app.use((request, response, next) => {
   next()
 });
 
-const template = (path) => {
+const template = (path, cb) => {
   const read = fs.readFile(path, 'utf8', (err, data) => {
     if(err) {
       return console.error(`Error: ${err}`);
@@ -39,14 +39,19 @@ const template = (path) => {
   const fnPugCompile = pug.compile(path);
   const renderPugData = fnPugCompile(fnPugCompile)
 
-  return renderPugData;
+  return cb(null, renderPugData)
 };
 
-const x = template("views/home.pug")
 
 app.use('/home', (request, response) => {
-  response.end(x);
-});
+  template( "views/home.pug", (err, script) => {
+    if(err) {
+      console.error(`Error ${err}`);
+    }
+
+    response.end(script);
+  });
+})
 
 app.get(`/${name.name}`, (request, response) => {
   response.send(`hello ${name.name}!`)
