@@ -14,7 +14,7 @@ app.use((request, response, next) => {
     if( i < 10) {
       i = "0" + i
     }
-  return i
+    return i
   }
 
   const now = new Date();
@@ -22,6 +22,7 @@ app.use((request, response, next) => {
   const minutes = addZero(now.getMinutes());
   const seconds = addZero(now.getSeconds());
   const data = `${hour}:${minutes}:${seconds} ${request.method} ${request.url}`
+
   fs.appendFile('server.log', data + '\n', (err) => {
     if (err) throw err
   })
@@ -29,27 +30,26 @@ app.use((request, response, next) => {
 });
 
 const template = (path, cb) => {
-  const read = fs.readFile(path, 'utf8', (err, data) => {
-    if(err) {
-      return console.error(`Error: ${err}`);
+  fs.readFile(path, 'utf8', (err, data) => {
+    if (err) {
+      return cb(err, text)
     }
-    return data
+    const fn = pug.compile(data);
+    const text = fn({
+      title: 'bsx was here',
+      main: 'aloha!'
+    });
+    
+    cb(null, text)
   })
-
-  const fnPugCompile = pug.compile(path);
-  const renderPugData = fnPugCompile(fnPugCompile)
-
-  return cb(null, renderPugData)
 };
 
-
 app.use('/home', (request, response) => {
-  template( "views/home.pug", (err, script) => {
+  template( "views/home.pug", (err, text) => {
     if(err) {
       console.error(`Error ${err}`);
     }
-
-    response.end(script);
+    response.end(text);
   });
 })
 
@@ -68,8 +68,3 @@ app.get('/about', function(request, response) {
 app.listen(port, host, () => {
     console.log('Server is listening on 3000 port')
 });
-
-let timerLog = setTimeout(function tick() {
-  console.log(`Waiting...`);
-  timer = setTimeout(tick, 20000);
-}, 2000);

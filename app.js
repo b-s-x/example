@@ -2,6 +2,7 @@ const fs = require('fs');
 const zlib = require('zlib');
 const Emitter = require('events')
 
+
 const fileContent = function(cb) {
   fs.readFile('text.txt', 'utf8', cb)
 }
@@ -29,3 +30,8 @@ fileContent((data, err) => {
   }
   console.log(data);
 })
+
+let timerLog = setTimeout(function tick() {
+  console.log(`Waiting...`);
+  timer = setTimeout(tick, 20000);
+}, 2000);
