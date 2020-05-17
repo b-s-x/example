@@ -4,30 +4,11 @@ const Emitter = require('events');
 const fs = require('fs')
 const ops = require('./app');
 const pug = require('pug')
+const timerLog = require('./log/timerLog')
 
 const port = 3000;
 const host = '127.0.0.1'
 
-app.use((request, response, next) => {
-
-  const addZero = (i) => {
-    if( i < 10) {
-      i = "0" + i
-    }
-    return i
-  }
-
-  const now = new Date();
-  const hour = addZero(now.getHours());
-  const minutes = addZero(now.getMinutes());
-  const seconds = addZero(now.getSeconds());
-  const data = `${hour}:${minutes}:${seconds} ${request.method} ${request.url}`
-
-  fs.appendFile('server.log', data + '\n', (err) => {
-    if (err) throw err
-  })
-  next()
-});
 
 const template = (path, cb) => {
   fs.readFile(path, 'utf8', (err, data) => {
@@ -39,10 +20,12 @@ const template = (path, cb) => {
       title: 'bsx was here',
       main: 'aloha!'
     });
-    
+
     cb(null, text)
   })
 };
+
+app.use(timerLog);
 
 app.use('/home', (request, response) => {
   template( "views/home.pug", (err, text) => {
